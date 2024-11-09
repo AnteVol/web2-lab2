@@ -8,7 +8,7 @@ const routes = require('./routes');
 const app = express();
 
 app.use(cors({
-    origin: 'https://web2-lab2-frontend-ed5o.onrender.com/',
+    origin: 'https://web2-lab2-frontend-ed5o.onrender.com',
     credentials: true
 }));
 app.use(bodyParser.json());
