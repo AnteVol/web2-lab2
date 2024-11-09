@@ -8,7 +8,7 @@ const routes = require('./routes');
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://web2-lab2-frontend-ed5o.onrender.com/',
     credentials: true
 }));
 app.use(bodyParser.json());
@@ -17,7 +17,7 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // set to true in production with HTTPS
+    cookie: { secure: true }
 }));
 
 app.use('/', routes);
