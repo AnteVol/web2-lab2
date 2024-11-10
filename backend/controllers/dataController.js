@@ -13,13 +13,17 @@ const getProtectedData = async (req, res) => {
         let queryParams;
        
         if (accessControlEnabled === true) {
-            query = `
+            if (user.role === 'admin'){
+                query = 'SELECT * FROM protected_data ORDER BY id';
+                queryParams = []
+            }else{
+                query = `
                 SELECT * FROM protected_data 
-                WHERE access_level = 'user' 
-                OR ($1 = 'admin' AND access_level = 'admin')
+                WHERE access_level = 'user'
                 ORDER BY id
             `;
             queryParams = [user.role];
+            }
         } else {
             query = 'SELECT * FROM protected_data ORDER BY id';
             queryParams = [];
