@@ -1,24 +1,37 @@
-const { protectedData } = require('../models/userModels');
+const { pool } = require('../db-utils/db-setup');
 
-const getProtectedData = (req, res) => {
-    const { accessControlEnabled } = req.query;
-    const user = req.session.user;
-    
-    if (!user) {
-        return res.status(401).json({ message: 'Not authenticated' });
-    }
-    
-    if (accessControlEnabled === 'true') {
-        const accessibleData = protectedData.filter(
-            item => item.accessLevel === user.role || item.accessLevel === 'user'
-        );
-        res.json({ data: accessibleData });
-    } else {
-        res.json({ data: protectedData });
+const getProtectedData = async (req, res) => {
+    try {
+        const { accessControlEnabled } = req.query;
+
+        let query;
+        let queryParams;
+       
+        if (accessControlEnabled === 'true') {
+            query = `
+                SELECT * FROM protected_data 
+                WHERE access_level = 'user' 
+                OR ($1 = 'admin' AND access_level = 'admin')
+                ORDER BY id
+            `;
+            queryParams = [user.role];
+        } else {
+            query = 'SELECT * FROM protected_data ORDER BY id';
+            queryParams = [];
+        }
+
+        const result = await pool.query(query, queryParams);
+        res.json({ data: result.rows });
+
+    } catch (error) {
+        console.error('Error fetching protected data:', error);
+        res.status(500).json({ 
+            message: 'Error fetching protected data',
+        });
     }
 };
 
-const handleComments = (req, res) => {
+const handleXss = (req, res) => {
     const { content, xssProtection } = req.body;
    
     if (xssProtection) {
@@ -36,5 +49,5 @@ const handleComments = (req, res) => {
 
 module.exports = {
     getProtectedData,
-    handleComments
+    handleXss
 };

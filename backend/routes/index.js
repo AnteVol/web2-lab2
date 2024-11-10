@@ -7,6 +7,6 @@ router.post('/api/login', authController.login);
 router.post('/api/logout', authController.logout);
 
 router.get('/api/protected-data', dataController.getProtectedData);
-router.post('/api/comments', dataController.handleComments);
+router.post('/api/handle-xss', dataController.handleXss);
 
 module.exports = router;
