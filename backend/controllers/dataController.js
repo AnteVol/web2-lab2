@@ -3,11 +3,16 @@ const { pool } = require('../db-utils/db-setup');
 const getProtectedData = async (req, res) => {
     try {
         const { accessControlEnabled } = req.query;
+        const user = req.session.user;
+       
+        if (!user) {
+            return res.status(401).json({ message: 'Not authenticated' });
+        }
 
         let query;
         let queryParams;
        
-        if (accessControlEnabled === 'true') {
+        if (accessControlEnabled === true) {
             query = `
                 SELECT * FROM protected_data 
                 WHERE access_level = 'user' 
