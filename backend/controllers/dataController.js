@@ -8,8 +8,6 @@ const getProtectedData = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Not authenticated' });
         }
-        console.log('sending: ' + req.query.accessControlEnabled)
-        console.log(req)
         let query;
 
         if (accessControlEnabled) {
