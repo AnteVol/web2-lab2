@@ -2,7 +2,7 @@ const { pool } = require('../db-utils/db-setup');
 
 const getProtectedData = async (req, res) => {
     try {
-        const accessControlEnabled = req.query.accessControlEnabled ;
+        const accessControlEnabled = req.query.accessControlEnabled === 'true';
         const user = req.session.user;
        
         if (!user) {
