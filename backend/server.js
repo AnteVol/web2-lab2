@@ -17,7 +17,7 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true }
+    cookie: { secure: false }
 }));
 
 app.use('/', routes);
