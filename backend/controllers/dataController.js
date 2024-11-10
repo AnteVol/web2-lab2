@@ -8,28 +8,24 @@ const getProtectedData = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Not authenticated' });
         }
-
+        
         let query;
-        let queryParams;
-       
-        if (accessControlEnabled === true) {
-            if (user.role === 'admin'){
+
+        if (accessControlEnabled) {
+            if (user.role === 'admin') {
                 query = 'SELECT * FROM protected_data ORDER BY id';
-                queryParams = []
-            }else{
+            } else {
                 query = `
-                SELECT * FROM protected_data 
-                WHERE access_level = 'user'
-                ORDER BY id
-            `;
-            queryParams = [user.role];
+                    SELECT * FROM protected_data 
+                    WHERE access_level = 'user'
+                    ORDER BY id
+                `;
             }
         } else {
             query = 'SELECT * FROM protected_data ORDER BY id';
-            queryParams = [];
         }
-
-        const result = await pool.query(query, queryParams);
+        
+        const result = await pool.query(query);
         res.json({ data: result.rows });
 
     } catch (error) {
